@@ -74,6 +74,11 @@ width: 80%;
 }
 
 
+#error-message{
+    color: red;
+    font-size: 12px;
+ }
+
 footer {
     text-align: center;
     margin-top: 1rem;
@@ -87,21 +92,19 @@ footer {
     }
 }
 
-
 @media screen and (max-width: 880px) {
-   .form-box {
-    width: 100%;
-   }
-}
 
-@media screen and (max-width: 880px) {
     .container {
      flex-direction: column;
      width: 82%;
-     margin: 0 auto;
+     margin: 1.2rem auto;
      border-radius: 5px;
      box-shadow: 2px 0px 20px #5A5A5A;
     }
+
+    .form-box {
+        width: 100%;
+       }
 
     .left-content {
         height: 20%;
@@ -120,6 +123,11 @@ footer {
 
  
 @media screen and (max-width: 430px) {
+    .container{
+        height: 84vh;
+        margin-top: 2.5rem;
+    }
+
     #country-code {
         width: 20%;
     }
@@ -128,3 +136,5 @@ footer {
         width: 76%;
     }
  }
+
+ 
