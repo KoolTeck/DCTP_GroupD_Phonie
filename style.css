@@ -61,22 +61,41 @@ height: 80%;
 width: 80%;
 }
 
+
+.phone-logo-box {
+    display: inline-flex;
+    position: relative;
+}
+
 #country-code, #phoneNumber {
     height: 35px;
 }
 
 #phoneNumber {
-    width: 55%;
+    width: 100%;
     padding: 0 0.7rem;
     color: #9747FF;
     outline: none;
     border: 1px solid #5A5A5A;
 }
 
+.carrierLogo {
+    position: absolute;
+    right: 5px;
+    top: 13%;
+    border-radius: 50%;
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
 
 #error-message{
     color: red;
     font-size: 12px;
+    margin-top: 5px;
  }
 
 footer {
