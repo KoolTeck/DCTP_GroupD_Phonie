@@ -27,3 +27,22 @@ const networkProviders = {
   airtel: [0802, 0902, 0701, 0808, 0708, 0812, 0901, 0907],
   etisalat: [0809, 0909, 0817, 0818, 0908,]
 }
+
+/*to take the first 4 digits*/
+
+const newNumber = phoneNumber.substring (0,5)
+
+function checkNumber(newnumber) {
+    for (n in networkProviders) {
+        if (n == newnumber) {
+           getObjectKey()
+        } else {
+            prompt("network provider not found")
+            return null
+        } }
+   }
+    
+
+function getObjectKey(networkProviders, newnumber) {
+    return Object.keys(networkProviders).find(key => networkProviders[key] === value);
+}
