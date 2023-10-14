@@ -6,9 +6,9 @@
  * airtel: 07082243474
  * 9mobile: 09096841472
  *
- * Test string for foreign number Number
+ * Test string for foreign Number
  * country code: +1  phone number: 4158586273
- *               +44               07044480579              
+ *               +44               07044480579
  *               +375              234030461
  * more numbers?
  * check https://www.bestrandoms.com/random-cm-phone-number
@@ -79,7 +79,10 @@ document
 
 async function getProviderName(phoneNumber) {
   try {
-    const url = `http://apilayer.net/api/validate?access_key=745040474db1ea46aee5a3044c2578ed&number=${phoneNumber}&format=1`;
+    // changed the api url due to http vs https loading issue during the deployment
+    // const url = `http://apilayer.net/api/validate?access_key=745040474db1ea46aee5a3044c2578ed&number=${phoneNumber}&format=1`;
+    //new url
+    const url = `https://phonevalidation.abstractapi.com/v1/?api_key=8c835e2fe13140cc946870e73674fdb6&phone=${phoneNumber}`;
     const resp = await fetch(url);
     const carrierData = await resp.json();
     if (carrierData.valid) {
