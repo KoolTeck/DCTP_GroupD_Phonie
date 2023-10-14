@@ -147,12 +147,18 @@ footer {
         margin-top: 2.5rem;
     }
 
+    .phone-logo-box {
+	display: flex;
+    }
+    
     #country-code {
-        width: 20%;
+        width: 50%;
+	margin: 10px auto;
     }
     
     #phoneNumber {
-        width: 76%;
+        width: 100%;
+	margin: 0 auto;
     }
  }
 
