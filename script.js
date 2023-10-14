@@ -1,84 +1,96 @@
-const networkProviders = {
-  mtn: [
-    "0803",
-    "0806",
-    "0703",
-    "0903",
-    "0906",
-    "0806",
-    "0706",
-    "0813",
-    "0810",
-    "0814",
-    "0816",
-    "0913",
-    "0916",
-  ],
-  glo: ["0805", "0705", "0905", "0807", "0815", "0811", "0915"],
-  airtel: ["0802", "0902", "0701", "0808", "0708", "0812", "0901", "0907"],
-  "9mobile": ["0809", "0909", "0817", "0818", "0908"],
-};
+/**
+ * The method in this format implement an api to check for the validity of a phone number and display its logo
+ * Test string for local Number:
+ * mtn: 07068414723
+ * glo: 07058414723
+ * airtel: 07082243474
+ * 9mobile: 09096841472
+ *
+ * Test string for foreign number Number
+ * country code: +1  phone number: 4158586273
+ *               +44               07044480579              
+ *               +375              234030461
+ * more numbers?
+ * check https://www.bestrandoms.com/random-cm-phone-number
+ */
 
-document.getElementById("phoneNumber").addEventListener("input", function () {
-  const phoneNumber = this.value;
-  const errorDiv = document.getElementById("error-message");
-  const carrierLogo = document.querySelector(".carrierLogo");
+document
+  .getElementById("phoneNumber")
+  .addEventListener("input", async function () {
+    let phoneNumber = this.value.trim();
+    const errorDiv = document.getElementById("error-message");
+    const carrierLogo = document.querySelector(".carrierLogo");
+    const countryCode = document.getElementById("country-code");
 
-  if (!/^\d+$/.test(phoneNumber)) {
-    errorDiv.textContent = "Phone number must only contain digits";
-    carrierLogo.classList.remove("show");
-  } else if (phoneNumber.length > 11 || phoneNumber.length < 11) {
-    errorDiv.textContent = " Phone number must  be 11 characters";
-    carrierLogo.classList.remove("show");
-  } else {
-    errorDiv.textContent = "";
-    const phoneNumberPrefix = phoneNumber.substring(0, 4);
-    // check if number exists in providers list
-    const carrier = getProviderName(phoneNumberPrefix);
-    let carrierLogoSrc = "";
-    if (carrier) {
-      // set src for individual logo
-      switch (carrier) {
-        case "mtn":
-          carrierLogoSrc = "./images/mtn-logo.png";
-          break;
-        case "glo":
-          carrierLogoSrc = "./images/glo-logo.png";
-          break;
-        case "airtel":
-          carrierLogoSrc = "./images/airtel-logo.png";
-          break;
-        case "9mobile":
-          carrierLogoSrc = "./images/9mobile-logo.png";
-          break;
-
-        default:
-          break;
-      }
-      carrierLogo.setAttribute("src", carrierLogoSrc);
-      carrierLogo.classList.add("show");
-    } else {
-      // show error and reset logo
-      errorDiv.textContent = "invalid phone number";
+    if (!/^\d+$/.test(phoneNumber)) {
+      errorDiv.textContent = "Phone number must only contain digits";
+      errorDiv.style.color = "red";
       carrierLogo.classList.remove("show");
-    }
-  }
-});
+    } else if (phoneNumber.length > 11) {
+      errorDiv.textContent = " Phone number must  be 11 characters";
+      errorDiv.style.color = "red";
+      carrierLogo.classList.remove("show");
+    } else {
+      errorDiv.textContent = "";
+      phoneNumber = countryCode.value.trim() + phoneNumber;
+      // check if number exists in providers list
+      let carrier = await getProviderName(phoneNumber);
+      const foreignCarrierName = carrier; // saves the initial carriername before slicing
+      let carrierLogoSrc = "";
+      if (carrier) {
+        carrier = carrier.substring(0, 3).toLowerCase();
+        // set src for individual logo
+        switch (carrier) {
+          case "mtn":
+            carrierLogoSrc = "./images/mtn-logo.png";
+            break;
+          case "glo":
+            carrierLogoSrc = "./images/glo-logo.png";
+            break;
+          case "air":
+            carrierLogoSrc = "./images/airtel-logo.png";
+            break;
+          case "eme":
+            carrierLogoSrc = "./images/9mobile-logo.png";
+            break;
 
-const getProviderName = (carrierPrefix) => {
-  for (const carrier in networkProviders) {
-    if (networkProviders[carrier].includes(carrierPrefix)) {
-      return carrier;
+          case "nil":
+            carrierLogoSrc = "./images/phone-logo.png";
+            errorDiv.innerHTML =
+              "That's probably a foreign number 😎 without carrier name";
+            errorDiv.style.color = "green";
+            break;
+          default:
+            carrierLogoSrc = "./images/phone-logo.png";
+            errorDiv.innerHTML = `That's probably a foreign number 😎 <b>Name: ${foreignCarrierName}</b>`;
+            errorDiv.style.color = "green";
+            break;
+        }
+        carrierLogo.setAttribute("src", carrierLogoSrc);
+        carrierLogo.classList.add("show");
+      } else {
+        // show error and reset logo
+        errorDiv.textContent = "invalid phone number";
+        errorDiv.style.color = "red";
+        carrierLogo.classList.remove("show");
+      }
     }
+  });
+
+async function getProviderName(phoneNumber) {
+  try {
+    const url = `http://apilayer.net/api/validate?access_key=745040474db1ea46aee5a3044c2578ed&number=${phoneNumber}&format=1`;
+    const resp = await fetch(url);
+    const carrierData = await resp.json();
+    if (carrierData.valid) {
+      if (!carrierData.carrier) {
+        return "nill";
+      }
+      return carrierData.carrier;
+    }
+  } catch (error) {
+    console.error(error);
   }
+
   return null;
-};
-
-/*The names of the network providers are stored
-as properties in the "networkProviders" Object, 
-the value of these properties are an array of 
-the number formats of the network providers.
-
-The number formats are gotten from 
-https://smartsmssolutions.com/blog/80-news/1395-nigeria-phone-number-prefix
-*/
+}
