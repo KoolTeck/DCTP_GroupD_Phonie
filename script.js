@@ -27,7 +27,7 @@ document
       errorDiv.style.color = "red";
       carrierLogo.classList.remove("show");
     } else if (phoneNumber.length > 11) {
-      errorDiv.textContent = " Phone number must  be 11 characters";
+      errorDiv.textContent = " Phone number must  be 11 characters or less";
       errorDiv.style.color = "red";
       carrierLogo.classList.remove("show");
     } else {
@@ -39,6 +39,7 @@ document
       let carrierLogoSrc = "";
       if (carrier) {
         carrier = carrier.substring(0, 3).toLowerCase();
+        console.log(carrier);
         // set src for individual logo
         switch (carrier) {
           case "mtn":
@@ -50,14 +51,14 @@ document
           case "air":
             carrierLogoSrc = "./images/airtel-logo.png";
             break;
-          case "eme":
+          case "9mo":
             carrierLogoSrc = "./images/9mobile-logo.png";
             break;
 
           case "nil":
             carrierLogoSrc = "./images/phone-logo.png";
             errorDiv.innerHTML =
-              "That's probably a foreign number 😎 without carrier name";
+              "That's a valid number 😎 without carrier name";
             errorDiv.style.color = "green";
             break;
           default:
