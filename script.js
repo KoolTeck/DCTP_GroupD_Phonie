@@ -1,3 +1,12 @@
+/*The names of the network providers are stored
+as properties in the "networkProviders" Object, 
+the value of these properties are an array of 
+the number formats of the network providers.
+
+The number formats are gotten from 
+https://smartsmssolutions.com/blog/80-news/1395-nigeria-phone-number-prefix
+*/
+
 const networkProviders = {
   mtn: [
     "0803",
@@ -73,12 +82,3 @@ const getProviderName = (carrierPrefix) => {
   }
   return null;
 };
-
-/*The names of the network providers are stored
-as properties in the "networkProviders" Object, 
-the value of these properties are an array of 
-the number formats of the network providers.
-
-The number formats are gotten from 
-https://smartsmssolutions.com/blog/80-news/1395-nigeria-phone-number-prefix
-*/
