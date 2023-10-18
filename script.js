@@ -39,7 +39,6 @@ document
       let carrierLogoSrc = "";
       if (carrier) {
         carrier = carrier.substring(0, 3).toLowerCase();
-        console.log(carrier);
         // set src for individual logo
         switch (carrier) {
           case "mtn":
@@ -51,7 +50,7 @@ document
           case "air":
             carrierLogoSrc = "./images/airtel-logo.png";
             break;
-          case "9mo":
+          case "eme":
             carrierLogoSrc = "./images/9mobile-logo.png";
             break;
 
@@ -81,9 +80,9 @@ document
 async function getProviderName(phoneNumber) {
   try {
     // changed the api url due to http vs https loading issue during the deployment
-    // const url = `http://apilayer.net/api/validate?access_key=745040474db1ea46aee5a3044c2578ed&number=${phoneNumber}&format=1`;
+    const url = `http://apilayer.net/api/validate?access_key=745040474db1ea46aee5a3044c2578ed&number=${phoneNumber}&format=1`;
     //new url
-    const url = `https://phonevalidation.abstractapi.com/v1/?api_key=8c835e2fe13140cc946870e73674fdb6&phone=${phoneNumber}`;
+    // const url = `https://phonevalidation.abstractapi.com/v1/?api_key=8c835e2fe13140cc946870e73674fdb6&phone=${phoneNumber}`;
     const resp = await fetch(url);
     const carrierData = await resp.json();
     if (carrierData.valid) {
