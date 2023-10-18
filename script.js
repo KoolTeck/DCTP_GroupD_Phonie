@@ -35,9 +35,9 @@ document
       phoneNumber = countryCode.value.trim() + phoneNumber;
       // check if number exists in providers list
       let carrier = await getProviderName(phoneNumber);
-      const foreignCarrierName = carrier; // saves the initial carriername before slicing
       let carrierLogoSrc = "";
-      if (carrier) {
+      if (carrier && typeof carrier === "string") {
+        const prevCarrierName = carrier;
         carrier = carrier.substring(0, 3).toLowerCase();
         // set src for individual logo
         switch (carrier) {
@@ -53,19 +53,17 @@ document
           case "9mo":
             carrierLogoSrc = "./images/9mobile-logo.png";
             break;
-
-          case "nil":
-            carrierLogoSrc = "./images/phone-logo.png";
-            errorDiv.innerHTML =
-              "That's a valid number 😎 without carrier name";
-            errorDiv.style.color = "green";
-            break;
           default:
             carrierLogoSrc = "./images/phone-logo.png";
-            errorDiv.innerHTML = `That's probably a foreign number 😎 <b>Name: ${foreignCarrierName}</b>`;
+            errorDiv.innerHTML = `That's a foreign number 😎 <b>Name: ${prevCarrierName}</b>`;
             errorDiv.style.color = "green";
-            break;
         }
+        carrierLogo.setAttribute("src", carrierLogoSrc);
+        carrierLogo.classList.add("show");
+      } else if (typeof carrier === "object" && carrier !== null) {
+        carrierLogoSrc = "./images/phone-logo.png";
+        errorDiv.innerHTML = `That's a foreign number 😎 from <b>${carrier.country}</b>`;
+        errorDiv.style.color = "green";
         carrierLogo.setAttribute("src", carrierLogoSrc);
         carrierLogo.classList.add("show");
       } else {
@@ -87,7 +85,7 @@ async function getProviderName(phoneNumber) {
     const carrierData = await resp.json();
     if (carrierData.phone_valid) {
       if (!carrierData.carrier) {
-        return "nill";
+        return carrierData;
       }
       return carrierData.carrier;
     }
